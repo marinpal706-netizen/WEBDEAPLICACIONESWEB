@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mi primera página con estilo</title>
+  <link rel="stylesheet" href="miestilo.css">
+</head>
+
+<body>
+
+<!-- Menú de navegación del sitio -->
+<ul class="navbar">
+  <li><a href="indice.html">Página principal</a>
+  <li><a href="meditaciones.html">Meditaciones</a>
+  <li><a href="ciudad.html">Mi ciudad</a>
+  <li><a href="enlaces.html">Enlaces</a>
+</ul>
+  <!-- Contenedor del Hiper-Reloj Cinético 3D -->
+  <div id="clock-universe" style="position: relative; width: 100%; max-width: 650px; margin: 60px auto; padding: 5px; border-radius: 40px; background: linear-gradient(135deg, #00f2fe, #4facfe, #000000); box-shadow: 0 30px 60px rgba(0, 242, 254, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2); transform: perspective(1000px) rotateX(15deg) rotateY(0deg); transform-style: preserve-3d; transition: transform 0.1s ease-out; overflow: visible;">
+    
+    <!-- Efecto Láser Holográfico que barre el reloj verticalmente -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 12px; background: linear-gradient(to bottom, rgba(0, 242, 254, 1), rgba(0, 242, 254, 0)); opacity: 0.8; animation: barridoLaser 3s ease-in-out infinite; z-index: 10; pointer-events: none;"></div>
+    
+    <!-- Anillos Orbitales que giran en direcciones opuestas en el espacio 3D -->
+    <div style="position: absolute; width: 120%; height: 140%; top: -20%; left: -10%; border: 2px dashed rgba(0, 242, 254, 0.25); border-radius: 50%; transform: rotateX(70deg) rotateZ(0deg); animation: orbitaGiro 12s linear infinite; z-index: 1; pointer-events: none;"></div>
+    <div style="position: absolute; width: 130%; height: 150%; top: -25%; left: -15%; border: 1px dotted rgba(255, 0, 127, 0.3); border-radius: 50%; transform: rotateX(60deg) rotateZ(0deg); animation: orbitaGiroInverso 16s linear infinite; z-index: 1; pointer-events: none;"></div>
+
+    <!-- Núcleo de Cristal Líquido (Chasis Interactivo) -->
+    <div style="position: relative; z-index: 2; background: rgba(6, 9, 20, 0.94); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 36px; padding: 50px 30px; border: 1px solid rgba(255, 255, 255, 0.08); text-align: center; box-shadow: inset 0 0 40px rgba(0,0,0,0.95); transform: translateZ(40px); transform-style: preserve-3d;">
+      
+      <!-- Interfaz Superior de Datos -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 0 20px; border-bottom: 1px solid rgba(0, 242, 254, 0.15); padding-bottom: 15px; transform: translateZ(20px);">
+        <span style="color: #ff007f; font-family: monospace; font-size: 0.75rem; letter-spacing: 3px; text-shadow: 0 0 10px #ff007f; animation: pulsoAlerta 0.6s infinite alternate;">QUANTUM ENGINE</span>
+        <div id="fecha-3d" style="color: #00f2fe; font-family: 'Courier New', Courier, monospace; font-size: 1.1rem; font-weight: bold; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 0 15px rgba(0, 242, 254, 0.9);">---</div>
+        <span style="color: #00f2fe; font-family: monospace; font-size: 0.75rem; letter-spacing: 3px; opacity: 0.7;">V.4.0</span>
+      </div>
+
+      <!-- Contenedor Principal de Bloques Numéricos Volumétricos -->
+      <div style="display: flex; justify-content: center; align-items: flex-end; gap: 15px; position: relative; transform-style: preserve-3d;">
+        
+        <!-- Horas -->
+        <div class="bloque-quantum" style="transform: translateZ(50px);">
+          <span id="h-quantum" class="digito-quantum" style="color: #ffffff; text-shadow: 0 0 30px rgba(255,255,255,0.7);">00</span>
+          <span class="sub-etiqueta">HOURS</span>
+        </div>
+        
+        <span class="separador-cuantico">:</span>
+        
+        <!-- Minutos -->
+        <div class="bloque-quantum" style="transform: translateZ(50px);">
+          <span id="m-quantum" class="digito-quantum" style="color: #00f2fe; text-shadow: 0 0 30px rgba(0, 242, 254, 0.7);">00</span>
+          <span class="sub-etiqueta">MINUTES</span>
+        </div>
+        
+        <span class="separador-cuantico">:</span>
+        
+        <!-- Segundos -->
+        <div class="bloque-quantum" style="min-width: 120px; transform: translateZ(50px);">
+          <span id="s-quantum" class="digito-quantum" style="color: #ff007f; text-shadow: 0 0 35px rgba(255, 0, 127, 0.8); font-size: 5rem;">00</span>
+          <span class="sub-etiqueta" style="color: #ff007f;">SECONDS</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Motor de Animaciones CSS Avanzadas y Efectos de Distorsión -->
+  <style>
+    .bloque-quantum { display: flex; flex-direction: column; align-items: center; position: relative; transform-style: preserve-3d; }
+    .digito-quantum { font-family: 'Impact', 'Arial Black', sans-serif; font-size: 5.2rem; font-weight: 900; letter-spacing: 1px; line-height: 1; transition: transform 0.1s ease; display: inline-block; }
+    .sub-etiqueta { font-family: monospace; font-size: 0.7rem; color: #555; letter-spacing: 3px; margin-top: 12px; font-weight: bold; transform: translateZ(10px); }
+    .separador-cuantico { font-family: 'Impact', sans-serif; font-size: 4.8rem; color: rgba(0, 242, 254, 0.2); line-height: 0.85; animation: destelloLaser 1s infinite alternate; padding-bottom: 22px; transform: translateZ(30px); }
+    
+    /* Animaciones Cinéticas */
+    @keyframes barridoLaser { 0% { top: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+    @keyframes orbitaGiro { 100% { transform: rotateX(70deg) rotateZ(360deg); } }
+    @keyframes orbitaGiroInverso { 100% { transform: rotateX(60deg) rotateZ(-360deg); } }
+    @keyframes destelloLaser { 0% { color: rgba(0, 242, 254, 0.15); text-shadow: none; } 100% { color: #00f2fe; text-shadow: 0 0 20px #00f2fe; } }
+    @keyframes pulsoAlerta { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+    
+    /* Efecto 3D de Volteo Mecánico al Cambiar de Número */
+    .vuelta-3d { animation: voltearEje 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
+    @keyframes voltearEje {
+      0% { transform: rotateX(-90deg) scale(0.7); opacity: 0; filter: brightness(3); }
+      50% { filter: brightness(1.8); }
+      100% { transform: rotateX(0deg) scale(1); opacity: 1; filter: brightness(1); }
+    }
+  </style>
+
+  <!-- Lógica de Control Dinámico Giroscópico y Actualización Real -->
+  <script>
+    const contenedorPrincipal = document.getElementById('clock-universe');
+
+    // Efecto interactivo: El reloj sigue la posición física del ratón en un espacio tridimensional real
+    document.addEventListener('mousemove', (evento) => {
+      const limites = contenedorPrincipal.getBoundingClientRect();
+      const centroX = limites.left + limites.width / 2;
+      const centroY = limites.top + limites.height / 2;
+      
+      // Calcular la inclinación basada en la posición
+      const ejeX = (centroY - evento.clientY) / 12;
+      const ejeY = (evento.clientX - centroX) / 12;
+      
+      // Aplicar la matriz de transformación 3D
+      contenedorPrincipal.style.transform = `perspective(1000px) rotateX(${15 + ejeX}deg) rotateY(${ejeY}deg)`;
+    });
+
+    // Resetear posición suavemente cuando el ratón sale de la pantalla
+    document.addEventListener('mouseleave', () => {
+      contenedorPrincipal.style.transform = 'perspective(1000px) rotateX(15deg) rotateY(0deg)';
+    });
+
+    function ejecutarRelojCuantico() {
+      const fechaNodo = document.getElementById('fecha-3d');
+      const hNodo = document.getElementById('h-quantum');
+      const mNodo = document.getElementById('m-quantum');
+      const sNodo = document.getElementById('s-quantum');
+
+      const instantaneo = new Date();
+
+      // Formatear Fecha
+      const configuracion = { day: '2-digit', month: 'short', year: '2-digit' };
+      const textoFinalFecha = instantaneo.toLocaleDateString('en-US', configuracion).replace(/,/g, '');
+      if(fechaNodo.textContent !== textoFinalFecha) {
+        fechaNodo.textContent = textoFinalFecha;
+      }
+
+      // Desglose numérico rígido
+      const horas = String(instantaneo.getHours()).padStart(2, '0');
+      const minutos = String(instantaneo.getMinutes()).padStart(2, '0');
+      const segundos = String(instantaneo.getSeconds()).padStart(2, '0');
+
+      // Inyección de cambio sincronizada con el motor estructural
+      inyectarEfecto3D(hNodo, horas);
+      inyectarEfecto3D(mNodo, minutos);
+      inyectarEfecto3D(sNodo, segundos);
+    }
+
+    function inyectarEfecto3D(nodoDestino, valorEntrada) {
+      if (nodoDestino.textContent !== valorEntrada) {
+        nodoDestino.textContent = valorEntrada;
+        nodoDestino.classList.remove('vuelta-3d');
+        void nodoDestino.offsetWidth; // Forzar lectura del navegador para refrescar animación
+        nodoDestino.classList.add('vuelta-3d');
+      }
+    }
+
+    // Encendido del motor temporal
+    setInterval(ejecutarRelojCuantico, 1000);
+    ejecutarRelojCuantico();
+  </script>
+
+
+
+
+
+
+<!-- Contenido principal -->
+<h1>Mi primera página con estilo</h1>
+
+<p>¡Bienvenido a mi primera página con estilo!
+
+<p>No tiene imágenes, pero tiene estilo.
+También tiene enlaces, aunque no te lleven a
+ningún sitio…
+
+<p>Debería haber más cosas aquí, pero todavía no sé
+qué poner.
+
+<!-- Firma y fecha de la página, ¡sólo por cortesía! -->
+<address>Creada el 5 de abril de 2004<br>
+  por Javier Palacios Martín.</address>
+                                                
+                                                <!-- this script is provided by https://www.javascriptfreecode.com coded by: Kerixa Inc. -->
+
+<style>
+#outerCircleText {
+    color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3000;
+    cursor: default;
+}
+
+#outerCircleText div {
+    position: relative;
+}
+
+#outerCircleText div div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+}
+</style>
+<script>
+; (function () {
+
+    var msg = "Javier AP";
+
+    // Set font's style size for calculating dimensions
+    // Set to number of desired pixels font size (decimal and negative numbers not allowed)
+    var size = 14;
+
+    // Set both to 1 for plain circle, set one of them to 2 for oval
+    // Other numbers & decimals can have interesting effects, keep these low (0 to 3)
+    var circleY = 1; var circleX = 1;
+
+    // The larger this divisor, the smaller the spaces between letters
+    // (decimals allowed, not negative numbers)
+    var letter_spacing = 4;
+
+    // The larger this multiplier, the bigger the circle/oval
+    // (decimals allowed, not negative numbers, some rounding is applied)
+    var diameter = 22;
+
+    // Rotation speed, set it negative if you want it to spin clockwise (decimals allowed)
+    var rotation = 0.2;
+
+    // This is not the rotation speed, its the reaction speed, keep low!
+    // Set this to 1 or a decimal less than one (decimals allowed, not negative numbers)
+    var speed = 0.5;
+
+    ////////////////////// Stop Editing //////////////////////
+
+    if (!window.addEventListener && !window.attachEvent || !document.createElement) return;
+
+    msg = msg.split('');
+    var n = msg.length - 1, a = Math.round(size * diameter * 0.20), currStep = 20,
+
+        ymouse = a * circleY + 20, xmouse = a * circleX + 20, y = [], x = [], Y = [], X = [],
+
+        o = document.createElement('div'), oi = document.createElement('div'),
+
+        b = document.compatMode && document.compatMode != "BackCompat" ? document.documentElement : document.body,
+
+        mouse = function (e) {
+            e = e || window.event;
+            ymouse = !isNaN(e.pageY) ? e.pageY : e.clientY; // y-position
+            xmouse = !isNaN(e.pageX) ? e.pageX : e.clientX; // x-position
+        },
+
+        makecircle = function () { // rotation/positioning
+
+            if (init.nopy) {
+                o.style.top = (b || document.body).scrollTop + 'px';
+                o.style.left = (b || document.body).scrollLeft + 'px';
+            };
+
+            currStep -= rotation;
+
+            for (var d, i = n; i > -1; --i) { // makes the circle
+                d = document.getElementById('iemsg' + i).style;
+                d.top = Math.round(y[i] + a * Math.sin((currStep + i) / letter_spacing) * circleY - 15) + 'px';
+                d.left = Math.round(x[i] + a * Math.cos((currStep + i) / letter_spacing) * circleX) + 'px';
+            };
+
+        },
+
+        drag = function () { // makes the resistance
+            y[0] = Y[0] += (ymouse - Y[0]) * speed;
+            x[0] = X[0] += (xmouse - 20 - X[0]) * speed;
+            for (var i = n; i > 0; --i) {
+                y[i] = Y[i] += (y[i - 1] - Y[i]) * speed;
+                x[i] = X[i] += (x[i - 1] - X[i]) * speed;
+            };
+            makecircle();
+        },
+
+        init = function () { // appends message divs, & sets initial values for positioning arrays
+
+            if (!isNaN(window.pageYOffset)) {
+                ymouse += window.pageYOffset;
+                xmouse += window.pageXOffset;
+            } else init.nopy = true;
+
+            for (var d, i = n; i > -1; --i) {
+                d = document.createElement('div'); d.id = 'iemsg' + i;
+                d.style.height = d.style.width = a + 'px';
+                d.appendChild(document.createTextNode(msg[i]));
+                oi.appendChild(d); y[i] = x[i] = Y[i] = X[i] = 0;
+            };
+
+            o.appendChild(oi); document.body.appendChild(o);
+            setInterval(drag, 25);
+
+        },
+
+        ascroll = function () {
+            ymouse += window.pageYOffset;
+            xmouse += window.pageXOffset;
+            window.removeEventListener('scroll', ascroll, false);
+        };
+
+    o.id = 'outerCircleText'; o.style.fontSize = size + 'px';
+
+    if (window.addEventListener) {
+        window.addEventListener('load', init, false);
+        document.addEventListener('mouseover', mouse, false);
+        document.addEventListener('mousemove', mouse, false);
+        if (/Apple/.test(navigator.vendor))
+            window.addEventListener('scroll', ascroll, false);
+    }
+
+    else if (window.attachEvent) {
+        window.attachEvent('onload', init);
+        document.attachEvent('onmousemove', mouse);
+    };
+
+})();
+</script>
+
+<div style="display: flex; justify-content: center; margin: 40px auto; perspective: 1000px; font-family: system-ui, sans-serif;">
+  <div id="tarjeta-holo" style="position: relative; width: 320px; height: 200px; background: #0c0f1d; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.6); overflow: hidden; transform-style: preserve-3d; transition: transform 0.1s ease-out; display: flex; flex-direction: column; justify-content: space-between; padding: 25px; box-sizing: border-box;">
+    
+    <!-- Capa de brillo holográfico -->
+    <div id="brillo-holo" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(0,242,254,0.15) 40%, rgba(255,0,127,0.15) 60%, rgba(255,255,255,0) 100%); mix-blend-mode: color-dodge; pointer-events: none; opacity: 0; transition: opacity 0.3s;"></div>
+
+    <div style="color: #ff007f; font-size: 0.65rem; font-weight: bold; letter-spacing: 4px; transform: translateZ(20px);">ACCESO CONCEDIDO</div>
+    <div style="color: #fff; font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; transform: translateZ(40px); text-shadow: 0 4px 10px rgba(0,0,0,0.5);">NEXUS PASSPORT</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; transform: translateZ(30px);">
+      <span style="color: #61708f; font-family: monospace; font-size: 0.75rem; letter-spacing: 2px;">ID // 8849-X</span>
+      <div style="width: 35px; height: 25px; background: linear-gradient(90deg, #00f2fe, #7928ca); border-radius: 6px; box-shadow: 0 0 10px #00f2fe;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const tarjeta = document.getElementById('tarjeta-holo');
+    const brillo = document.getElementById('brillo-holo');
+    if (!tarjeta || !brillo) return;
+
+    tarjeta.addEventListener('mousemove', (e) => {
+      const rect = tarjeta.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const px = (x / rect.width) * 100;
+      const py = (y / rect.height) * 100;
+      
+      const rotarX = ((y / rect.height) - 0.5) * -30;
+      const rotarY = ((x / rect.width) - 0.5) * 30;
+      
+      tarjeta.style.transform = `rotateX(${rotarX}deg) rotateY(${rotarY}deg)`;
+      brillo.style.opacity = '1';
+      brillo.style.background = `radial-gradient(circle at ${px}% ${py}%, rgba(255,255,255,0.3) 0%, rgba(0,242,254,0.2) 30%, rgba(255,0,127,0.2) 70%, transparent 100%)`;
+    });
+
+    tarjeta.addEventListener('mouseleave', () => {
+      tarjeta.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      brillo.style.opacity = '0';
+    });
+  })();
+</script>
+<div style="display: flex; justify-content: center; margin: 40px auto; font-family: monospace;">
+  <div id="caja-ondas" style="width: 100%; max-width: 550px; background: #060713; border: 1px solid #161b33; border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); text-align: center; cursor: pointer; overflow: hidden; position: relative;">
+    <div style="color: #61708f; font-size: 0.7rem; letter-spacing: 3px; font-weight: bold; margin-bottom: 15px;">AI FREQUENCY MONITOR</div>
+    <canvas id="canvas-ondas" style="width: 100%; height: 100px; display: block; background: #060713;"></canvas>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const contenedor = document.getElementById('caja-ondas');
+    const canvas = document.getElementById('canvas-ondas');
+    if (!contenedor || !canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let ancho = canvas.width = canvas.offsetWidth;
+    let alto = canvas.height = canvas.offsetHeight;
+    let fase = 0;
+    let velocidadBase = 0.05;
+    let velocidadActual = 0.05;
+    let amplitudBase = 15;
+    let amplitudActual = 15;
+
+    contenedor.addEventListener('mouseenter', () => {
+      velocidadActual = 0.15;
+      amplitudActual = 35;
+    });
+
+    contenedor.addEventListener('mouseleave', () => {
+      velocidadActual = 0.05;
+      amplitudActual = 15;
+    });
+
+    function dibujarOnda(amplitud, frecuencia, color, grosor, desfase) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = grosor;
+      ctx.beginPath();
+      for (let x = 0; x < ancho; x++) {
+        let y = alto / 2 + Math.sin(x * frecuencia + fase + desfase) * amplitud;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    function render() {
+      if(canvas.offsetWidth !== ancho) {
+        ancho = canvas.width = canvas.offsetWidth;
+        alto = canvas.height = canvas.offsetHeight;
+      }
+      ctx.clearRect(0, 0, ancho, alto);
+
+      // Interpolación suave para transiciones fluidas de velocidad y tamaño
+      amplitudBase += (amplitudActual - amplitudBase) * 0.1;
+      velocidadBase += (velocidadActual - velocidadBase) * 0.1;
+      fase += velocidadBase;
+
+      // Renderizado de tres capas de ondas con desfases matemáticos
+      dibujarOnda(amplitudBase * 0.5, 0.01, 'rgba(255, 0, 127, 0.2)', 1, 2);
+      dibujarOnda(amplitudBase * 0.8, 0.015, 'rgba(0, 242, 254, 0.4)', 1.5, 1);
+      dibujarOnda(amplitudBase, 0.02, '#00f2fe', 2.5, 0);
+
+      requestAnimationFrame(render);
+    }
+    render();
+  })();
+</script>
+
+
+
+<script>
+  (function() {
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '999999';
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    let particulas = [];
+
+    function redimensionar() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    redimensionar();
+    window.addEventListener('resize', redimensionar);
+
+    window.addEventListener('mousemove', (e) => {
+      for (let i = 0; i < 3; i++) {
+        particulas.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: (Math.random() - 0.5) * 3,
+          vy: (Math.random() - 0.5) * 3,
+          alfa: 1,
+          tamano: Math.random() * 3 + 2,
+          color: Math.random() > 0.5 ? '#00f2fe' : '#ff007f'
+        });
+      }
+    });
+
+    function loop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particulas.length; i++) {
+        let p = particulas[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alfa -= 0.02;
+        if (p.alfa <= 0) {
+          particulas.splice(i, 1);
+          i--;
+          continue;
+        }
+        ctx.save();
+        ctx.globalAlpha = p.alfa;
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.tamano, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+</script>
+
+<script>
+  (function() {
+    window.addEventListener('click', (e) => {
+      const onda = document.createElement('div');
+      onda.style.position = 'fixed';
+      onda.style.top = `${e.clientY}px`;
+      onda.style.left = `${e.clientX}px`;
+      onda.style.width = '0px';
+      onda.style.height = '0px';
+      onda.style.transform = 'translate(-50%, -50%)';
+      onda.style.borderRadius = '50%';
+      onda.style.border = '2px solid #00f2fe';
+      onda.style.boxShadow = '0 0 20px #00f2fe, inset 0 0 20px #ff007f';
+      onda.style.pointerEvents = 'none';
+      onda.style.zIndex = '999998';
+      onda.style.opacity = '1';
+      onda.style.transition = 'width 0.5s cubic-bezier(0.1, 0.8, 0.3, 1), height 0.5s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.5s ease-out';
+      
+      document.body.appendChild(onda);
+      
+      requestAnimationFrame(() => {
+        onda.style.width = '180px';
+        onda.style.height = '180px';
+        onda.style.opacity = '0';
+      });
+
+      setTimeout(() => {
+        onda.remove();
+      }, 500);
+    });
+  })();
+</script>
+
+<script>
+  (function() {
+    const elementos = document.querySelectorAll('h1, h2, h3, p, span, a');
+    elementos.forEach(el => {
+      if (el.children.length > 0 || el.innerText.trim() === "") return;
+      const texto = el.innerText;
+      el.innerHTML = '';
+      texto.split('').forEach(letra => {
+        const span = document.createElement('span');
+        span.innerText = letra === ' ' ? '\u00A0' : letra;
+        span.style.display = 'inline-block';
+        span.style.transition = 'transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.8s, color 0.3s';
+        span.style.cursor = 'default';
+        span.addEventListener('mouseover', () => {
+          let rx = (Math.random() - 0.5) * 150;
+          let ry = (Math.random() * 200) + 100;
+          let rot = (Math.random() - 0.5) * 360;
+          span.style.transform = `translate(${rx}px, ${ry}px) rotate(${rot}deg)`;
+          span.style.opacity = '0';
+          span.style.color = '#ff007f';
+          setTimeout(() => {
+            span.style.transform = 'none';
+            span.style.opacity = '1';
+            span.style.color = '';
+          }, 4000);
+        });
+        el.appendChild(span);
+      });
+    });
+  })();
+</script>
+<script>
+  (function() {
+    const cursor = document.createElement('div');
+    cursor.style.position = 'fixed';
+    cursor.style.width = '25px';
+    cursor.style.height = '25px';
+    cursor.style.border = '2px solid #00f2fe';
+    cursor.style.borderRadius = '50%';
+    cursor.style.pointerEvents = 'none';
+    cursor.style.zIndex = '9999999';
+    cursor.style.transform = 'translate(-50%, -50%)';
+    cursor.style.transition = 'width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s';
+    document.body.appendChild(cursor);
+    document.body.style.cursor = 'none';
+
+    let mx = 0, my = 0, cx = 0, cy = 0;
+    window.addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; });
+
+    function mover() {
+      cx += (mx - cx) * 0.15;
+      cy += (my - cy) * 0.15;
+      cursor.style.left = cx + 'px';
+      cursor.style.top = cy + 'px';
+      requestAnimationFrame(mover);
+    }
+    mover();
+
+    const interactivos = document.querySelectorAll('a, button, input, #clock-universe, [style*="cursor: pointer"]');
+    interactivos.forEach(el => {
+      el.style.cursor = 'none';
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '60px';
+        cursor.style.height = '60px';
+        cursor.style.background = 'rgba(0, 242, 254, 0.15)';
+        cursor.style.borderColor = '#ff007f';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '25px';
+        cursor.style.height = '25px';
+        cursor.style.background = 'transparent';
+        cursor.style.borderColor = '#00f2fe';
+      });
+    });
+  })();
+</script>
+
+
+
+
+
+
+
+
+
+<a target='_blank' href='https://www.javascriptfreecode.com' style='font-size: 8pt; text-decoration: none'>JavaScript Best Codes</a>                                                
+                                            
+<div style="display: flex; justify-content: center; margin: 50px auto; perspective: 1000px; font-family: monospace;">
+  <div id="orb-card" style="width: 280px; height: 280px; background: radial-gradient(circle, #10141e 0%, #05070b 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(0, 242, 254, 0.3); box-shadow: 0 0 50px rgba(0, 242, 254, 0.2), inset 0 0 40px rgba(0,0,0,0.9); position: relative; overflow: visible; transform-style: preserve-3d;">
+    <div style="position: absolute; width: 106%; height: 106%; border: 1px dashed rgba(255, 0, 127, 0.4); border-radius: 50%; animation: rotarOrb 20s linear infinite;"></div>
+    <div id="iris-cyber" style="width: 90px; height: 90px; background: radial-gradient(circle, #00f2fe 0%, #7928ca 70%, #000 100%); border-radius: 50%; box-shadow: 0 0 35px #00f2fe, inset 0 0 15px #fff; display: flex; align-items: center; justify-content: center; transition: transform 0.05s ease-out; transform: translateZ(40px);">
+      <div style="width: 30px; height: 30px; background: #000; border-radius: 50%; box-shadow: inset 0 0 10px rgba(255,255,255,0.8); position: relative;">
+        <div style="position: absolute; top: 4px; left: 4px; width: 8px; height: 8px; background: #fff; border-radius: 50%;"></div>
+      </div>
+    </div>
+    <span style="position: absolute; bottom: -30px; color: #00f2fe; font-size: 0.65rem; letter-spacing: 4px; text-shadow: 0 0 8px #00f2fe; animation: pulsoTexto 1s infinite alternate;">CURSOR TRACKING ACTIVE</span>
+  </div>
+</div>
+<style>
+  @keyframes rotarOrb { 100% { transform: rotate(360deg); } }
+  @keyframes pulsoTexto { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+</style>
+<script>
+  const targetCard = document.getElementById('orb-card');
+  const targetIris = document.getElementById('iris-cyber');
+  document.addEventListener('mousemove', (e) => {
+    const box = targetCard.getBoundingClientRect();
+    const cx = box.left + box.width / 2;
+    const cy = box.top + box.height / 2;
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+    const maxMove = 65; 
+    const moveX = (dx / dist) * Math.min(maxMove, dist * 0.15);
+    const moveY = (dy / dist) * Math.min(maxMove, dist * 0.15);
+    targetIris.style.transform = `translate3d(${moveX}px, ${moveY}px, 50px) rotateX(${-moveY*0.5}deg) rotateY(${moveX*0.5}deg)`;
+    targetCard.style.transform = `rotateX(${-moveY*0.2}deg) rotateY(${moveX*0.2}deg)`;
+  });
+</script>
+<div id="marco-led-top" style="position: fixed; top: 0; left: 0; width: 100vw; height: 6px; z-index: 999999; background: linear-gradient(90deg, #ff0055, #00f2fe, #00ff66, #ff0055); background-size: 300% 100%; animation: lucesCorridas 2s linear infinite, pestañeoLed 0.15s infinite alternate;"></div>
+<div id="marco-led-bottom" style="position: fixed; bottom: 0; left: 0; width: 100vw; height: 6px; z-index: 999999; background: linear-gradient(90deg, #ff0055, #00ff66, #00f2fe, #ff0055); background-size: 300% 100%; animation: lucesCorridas 2s linear infinite, pestañeoLed 0.15s infinite alternate-reverse;"></div>
+<div id="marco-led-left" style="position: fixed; top: 0; left: 0; width: 6px; height: 100vh; z-index: 999999; background: linear-gradient(180deg, #ff0055, #00f2fe, #00ff66, #ff0055); background-size: 100% 300%; animation: lucesCorridasVertical 2s linear infinite, pestañeoLed 0.15s infinite alternate;"></div>
+<div id="marco-led-right" style="position: fixed; top: 0; right: 0; width: 6px; height: 100vh; z-index: 999999; background: linear-gradient(180deg, #ff0055, #00ff66, #00f2fe, #ff0055); background-size: 100% 300%; animation: lucesCorridasVertical 2s linear infinite, pestañeoLed 0.15s infinite alternate-reverse;"></div>
+
+<style>
+  @keyframes lucesCorridas {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+  @keyframes lucesCorridasVertical {
+    0% { background-position: 50% 0%; }
+    100% { background-position: 50% 300%; }
+  }
+  @keyframes pestañeoLed {
+    0% { filter: drop-shadow(0 0 15px rgba(255, 0, 85, 1)) brightness(1.5); opacity: 1; }
+    50% { filter: drop-shadow(0 0 5px rgba(0, 242, 254, 0.5)) brightness(1); opacity: 0.85; }
+    100% { filter: drop-shadow(0 0 25px rgba(0, 255, 102, 1)) brightness(2); opacity: 1; }
+  }
+</style>
+
+<script>
+  (function() {
+    const colores = ['#ff0055', '#00f2fe', '#00ff66', '#ffff00', '#ff00ff'];
+    setInterval(() => {
+      const azar1 = colores[Math.floor(Math.random() * colores.length)];
+      const azar2 = colores[Math.floor(Math.random() * colores.length)];
+      document.getElementById('marco-led-top').style.boxShadow = `0 4px 20px ${azar1}`;
+      document.getElementById('marco-led-bottom').style.boxShadow = `0 -4px 20px ${azar2}`;
+      document.getElementById('marco-led-left').style.boxShadow = `4px 0 20px ${azar2}`;
+      document.getElementById('marco-led-right').style.boxShadow = `-4px 0 20px ${azar1}`;
+    }, 150);
+  })();
+</script>
+
+
+
+
+<canvas id="fondo-liquido-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background-color: #ffe600; pointer-events: none;"></canvas>
+
+<script>
+  (function() {
+    const canvas = document.getElementById('fondo-liquido-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let ondas = [];
+    const coloresOndas = ['rgba(0, 242, 254, ', 'rgba(255, 0, 127, ', 'rgba(0, 255, 102, '];
+
+    function redimensionar() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    redimensionar();
+    window.addEventListener('resize', redimensionar);
+
+    let ultimoX = 0;
+    let ultimoY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      let dx = e.clientX - ultimoX;
+      let dy = e.clientY - ultimoY;
+      let distancia = Math.sqrt(dx * dx + dy * dy);
+
+      if (distancia > 15) {
+        ondas.push({
+          x: e.clientX,
+          y: e.clientY,
+          radio: 5,
+          radioMax: Math.random() * 80 + 60,
+          velocidad: Math.random() * 3 + 2,
+          opacidad: 0.7,
+          color: coloresOndas[Math.floor(Math.random() * coloresOndas.length)]
+        });
+        ultimoX = e.clientX;
+        ultimoY = e.clientY;
+      }
+    });
+
+    function animarOndas() {
+      ctx.fillStyle = '#ffe600';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < ondas.length; i++) {
+        let o = ondas[i];
+        o.radio += o.velocidad;
+        o.opacidad -= 0.015;
+
+        if (o.opacidad <= 0 || o.radio >= o.radioMax) {
+          ondas.splice(i, 1);
+          i--;
+          continue;
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        let gradiente = ctx.createRadialGradient(o.x, o.y, o.radio * 0.2, o.x, o.y, o.radio);
+        gradiente.addColorStop(0, 'transparent');
+        gradiente.addColorStop(0.7, o.color + o.opacidad + ')');
+        gradiente.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = gradiente;
+        ctx.arc(o.x, o.y, o.radio, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      requestAnimationFrame(animarOndas);
+    }
+    animarOndas();
+  })();
+</script>
+<!-- Botón Holográfico Interactivo 3D Configurado -->
+<div style="display: flex; justify-content: center; margin: 40px auto; perspective: 1000px; font-family: monospace;">
+  <a href="mipagina1.html" id="enlace-dinamico" style="text-decoration: none; position: relative; width: 320px; padding: 25px; background: rgba(15, 18, 36, 0.95); border: 2px solid #00f2fe; border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 242, 254, 0.2), inset 0 0 15px rgba(0, 242, 254, 0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transform-style: preserve-3d; transition: transform 0.1s ease-out, border-color 0.3s, box-shadow 0.3s;">
+    
+    <!-- Línea de escaneo láser de fondo -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #ff0055; box-shadow: 0 0 10px #ff0055; opacity: 0.7; animation: escanearBoton 2.5s linear infinite; pointer-events: none; z-index: 1;"></div>
+    
+    <!-- Icono dinámico -->
+    <div style="width: 12px; height: 12px; background: #00f2fe; border-radius: 50%; box-shadow: 0 0 12px #00f2fe; animation: pulsoBoton 0.6s infinite alternate; transform: translateZ(20px);"></div>
+    
+    <!-- Texto del archivo destino -->
+    <div style="color: #ffffff; font-size: 1.4rem; font-weight: 900; letter-spacing: 1px; transform: translateZ(40px); text-shadow: 0 0 10px rgba(255,255,255,0.3);">mipagina1.html</div>
+    
+    <!-- Subtexto de acción -->
+    <div style="color: #ff0055; font-size: 0.75rem; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; transform: translateZ(30px); text-shadow: 0 0 8px rgba(255, 0, 85, 0.5);">PULSA AQUÍ</div>
+  </a>
+</div>
+
+<!-- Animaciones del botón -->
+<style>
+  @keyframes escanearBoton { 0% { top: 0%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+  @keyframes pulsoBoton { 0% { transform: translateZ(20px) scale(0.8); opacity: 0.5; } 100% { transform: translateZ(20px) scale(1.2); opacity: 1; } }
+</style>
+
+<!-- Lógicas 3D -->
+<script>
+  (function() {
+    const boton = document.getElementById('enlace-dinamico');
+    if (!boton) return;
+
+    boton.addEventListener('mousemove', (e) => {
+      const dimensiones = boton.getBoundingClientRect();
+      const centroX = dimensiones.left + dimensiones.width / 2;
+      const centroY = dimensiones.top + dimensiones.height / 2;
+      
+      const rotarX = (centroY - e.clientY) / 5;
+      const rotarY = (e.clientX - centroX) / 8;
+      
+      boton.style.transform = `perspective(1000px) rotateX(${rotarX}deg) rotateY(${rotarY}deg) scale(1.05)`;
+      boton.style.boxShadow = '0 25px 50px rgba(255, 0, 85, 0.4), inset 0 0 20px rgba(255, 0, 85, 0.2)';
+      boton.style.borderColor = '#ff0055';
+    });
+
+    boton.addEventListener('mouseleave', () => {
+      boton.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+      boton.style.boxShadow = '0 15px 35px rgba(0, 242, 254, 0.2), inset 0 0 15px rgba(0, 242, 254, 0.1)';
+      boton.style.borderColor = '#00f2fe';
+    });
+  })();
+</script>
+
+
+</body>
+</html>

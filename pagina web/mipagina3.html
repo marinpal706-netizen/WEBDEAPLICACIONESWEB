@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluación Dinámica - Aplicaciones Web</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      /* Fondo dinámico animado de alta tecnología */
+      background: linear-gradient(135deg, #070913 0%, #0c102b 50%, #050716 100%);
+      background-size: 400% 400%;
+      animation: fluidoGradiente 15s ease infinite;
+      color: #ffffff;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      perspective: 1500px; /* Brinda profundidad visual para el entorno 3D */
+    }
+
+    @keyframes fluidoGradiente {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container-3d {
+      max-width: 650px;
+      width: 90%;
+      background: rgba(13, 17, 38, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid #ff0055;
+      border-radius: 28px;
+      padding: 45px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 
+                  0 0 40px rgba(255, 0, 85, 0.25), 
+                  inset 0 0 25px rgba(255, 0, 85, 0.1);
+      box-sizing: border-box;
+      position: relative;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transform: rotateX(0deg) rotateY(0deg);
+      transition: transform 0.1s ease-out;
+    }
+
+    .header-quiz {
+      position: absolute;
+      top: 25px;
+      left: 45px;
+      right: 45px;
+      display: flex;
+      justify-content: space-between;
+      font-family: monospace;
+      color: #61708f;
+      font-size: 0.9rem;
+      border-bottom: 1px solid rgba(255, 0, 85, 0.2);
+      padding-bottom: 8px;
+      transform: translateZ(20px);
+    }
+
+    .pregunta-block {
+      display: none;
+      width: 100%;
+      animation: entradaPregunta 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      margin-top: 20px;
+      transform-style: preserve-3d;
+    }
+
+    .pregunta-block.active {
+      display: block;
+    }
+
+    @keyframes entradaPregunta {
+      from { opacity: 0; transform: translate3d(40px, 0, 20px); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    .alerta-clase {
+      color: #ff0055;
+      font-family: monospace;
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.5);
+      transform: translateZ(25px);
+    }
+
+    .pregunta-texto {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 25px;
+      color: #00f2fe;
+      line-height: 1.4;
+      text-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+      transform: translateZ(35px);
+    }
+
+    .opciones-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transform: translateZ(15px);
+    }
+
+    .opcion-btn {
+      background: rgba(5, 7, 18, 0.6);
+      padding: 15px 22px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      text-align: left;
+      color: #fff;
+    }
+
+    .opcion-btn:hover {
+      border-color: #ff0055;
+      background: rgba(255, 0, 85, 0.1);
+      transform: translateZ(10px) scale(1.02);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    #resultado-box {
+      text-align: center;
+      display: none;
+      animation: entradaResultado 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      transform-style: preserve-3d;
+    }
+
+    @keyframes entradaResultado {
+      from { opacity: 0; transform: translateZ(-50px) scale(0.9); }
+      to { opacity: 1; transform: translateZ(0) scale(1); }
+    }
+
+    .texto-veredicto {
+      font-size: 1.9rem;
+      color: #ff0055;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(255, 0, 85, 0.7);
+      margin-bottom: 12px;
+      transform: translateZ(40px);
+    }
+
+    .texto-detalles {
+      color: #00f2fe;
+      font-size: 1.25rem;
+      margin-bottom: 25px;
+      font-family: monospace;
+      text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+      transform: translateZ(30px);
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 15px;
+      transform: translateZ(25px);
+    }
+
+    .btn-action {
+      display: inline-block;
+      text-decoration: none;
+      padding: 14px 35px;
+      font-weight: bold;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .btn-back {
+      border: 2px solid #61708f;
+      color: #61708f;
+    }
+
+    .btn-back:hover {
+      border-color: #ffffff;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-next {
+      border: 2px solid #00f2fe;
+      color: #00f2fe;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    }
+
+    .btn-next:hover {
+      background: #00f2fe;
+      color: #000;
+      box-shadow: 0 0 25px #00f2fe;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Contenedor con físicas e inclinación interactiva 3D -->
+  <div class="container-3d" id="panel-3d">
+    
+    <!-- Cabecera estática -->
+    <div class="header-quiz" id="quiz-header">
+      <span>SISTEMAS EVALUACIÓN</span>
+      <span id="progreso-texto">PREGUNTA 1 / 5</span>
+    </div>
+
+    <!-- Contenedor dinámico de preguntas -->
+    <div id="preguntas-wrapper"></div>
+
+    <!-- Panel de cierre inevitable -->
+    <div id="resultado-box">
+      <div id="score-text" class="texto-detalles">Aciertos: 0 / 5</div>
+      <div class="texto-veredicto">VAS A SUSPENDER IGUALMENTE</div>
+      <p style="color: #61708f; font-size: 0.95rem; margin-bottom: 35px; font-family: monospace; transform: translateZ(10px);">La nota final ha sido procesada por la dirección del departamento.</p>
+      
+      <div class="button-group">
+        <button onclick="window.history.back()" class="btn-action btn-back">Volver Atrás</button>
+        <a href="mipagina4.html" class="btn-action btn-next">Ir a mipagina4.html</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Banco de datos ajustado estrictamente a 5 preguntas consecutivas
+    const bancoPreguntas = [
+      { q: "¿Qué protocolo cifra los datos transmitidos en la web?", o: ["HTTP", "HTTPS", "FTP"], a: 1 },
+      { q: "¿Cuál de estos formatos organiza la información en clave-valor?", o: ["JSON", "XML", "CSV"], a: 0 },
+      { q: "¿Qué método HTTP se utiliza estrictamente para eliminar recursos?", o: ["POST", "PUT", "DELETE"], a: 2 },
+      { q: "¿Qué herramienta aísla apps en entornos llamados contenedores?", o: ["Git", "Docker", "Vite"], a: 1 },
+      { q: "¿Qué código HTTP indica que un archivo o página no existe?", o: ["200", "404", "500"], a: 1 }
+    ];
+
+    let indiceActual = 0;
+    let aciertos = 0;
+    const wrapper = document.getElementById('preguntas-wrapper');
+    const progresoTexto = document.getElementById('progreso-texto');
+
+    // Inyección automatizada de las 5 preguntas
+    bancoPreguntas.forEach((item, index) => {
+      const block = document.createElement('div');
+      block.className = `pregunta-block ${index === 0 ? 'active' : ''}`;
+      
+      const alerta = document.createElement('div');
+      alerta.className = 'alerta-clase';
+      alerta.textContent = '⚠️ A ver si atendiste en clase...';
+      block.appendChild(alerta);
+
+      const texto = document.createElement('div');
+      texto.className = 'pregunta-texto';
+      texto.textContent = item.q;
+      block.appendChild(texto);
+
+      const grupo = document.createElement('div');
+      grupo.className = 'opciones-group';
+
+      item.o.forEach((opcion, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'opcion-btn';
+        btn.textContent = opcion;
+        btn.addEventListener('click', () => registrarRespuesta(index, i));
+        grupo.appendChild(btn);
+      });
+
+      block.appendChild(grupo);
+      wrapper.appendChild(block);
+    });
+
+    function registrarRespuesta(preguntaIndice, opcionSeleccionada) {
+      if (opcionSeleccionada === bancoPreguntas[preguntaIndice].a) {
+        aciertos++;
+      }
+
+      const bloques = document.querySelectorAll('.pregunta-block');
+      bloques[indiceActual].classList.remove('active');
+
+      indiceActual++;
+
+      if (indiceActual < bancoPreguntas.length) {
+        bloques[indiceActual].classList.add('active');
+        progresoTexto.textContent = `PREGUNTA ${indiceActual + 1} / 5`;
+      } else {
+        document.getElementById('quiz-header').style.display = 'none';
+        wrapper.style.display = 'none';
+        document.getElementById('score-text').textContent = `Aciertos: ${aciertos} / 5`;
+        document.getElementById('resultado-box').style.display = 'block';
+      }
+    }
+
+    // --- INTERACCIÓN GIROSCÓPICA TRIDIMENSIONAL (EFECTO 3D REAL) ---
+    const panel3D = document.getElementById('panel-3d');
+    document.addEventListener('mousemove', (e) => {
+      const mitadX = window.innerWidth / 2;
+      const mitadY = window.innerHeight / 2;
+      
+      // Multiplicadores de fuerza física para limitar la inclinación de la tarjeta
+      const rotacionY = (e.clientX - mitadX) / 20;
+      const rotacionX = (mitadY - e.clientY) / 20;
+
+      panel3D.style.transform = `rotateX(${rotacionX}deg) rotateY(${rotacionY}deg)`;
+    });
+
+    // Resetear posición de la tarjeta suavemente si el cursor sale de la pantalla
+    document.addEventListener('mouseleave', () => {
+      panel3D.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  </script>
+
+</body>
+</html>

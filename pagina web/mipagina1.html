@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juanlu App Dev Master</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #020205;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+
+    #canvas-espacio {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    .interface-master {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1000px;
+    }
+
+    .glass-panel {
+      max-width: 750px;
+      width: 90%;
+      background: rgba(10, 15, 30, 0.75);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      border-radius: 40px;
+      padding: 60px 40px;
+      box-sizing: border-box;
+      box-shadow: 0 50px 100px rgba(0, 0, 0, 0.7), 
+                  inset 0 0 40px rgba(0, 242, 254, 0.1);
+      text-align: center;
+      transform-style: preserve-3d;
+      transform: rotateX(5deg);
+      transition: transform 0.1s ease-out;
+    }
+
+    .cyber-badge {
+      display: inline-block;
+      padding: 8px 24px;
+      background: rgba(255, 0, 127, 0.15);
+      border: 1px solid #ff007f;
+      color: #ff007f;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px #ff007f;
+      animation: pulsoNeon 1.5s infinite alternate;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      margin: 0 0 25px 0;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 30%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transform: translateZ(30px);
+    }
+
+    .mensaje-core {
+      color: #e2e8f0;
+      font-size: 1.4rem;
+      line-height: 1.8;
+      margin: 0 auto 50px auto;
+      max-width: 620px;
+      font-weight: 500;
+      transform: translateZ(20px);
+    }
+
+    .resaltado-cyber {
+      color: #00f2fe;
+      font-weight: 800;
+      text-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+    }
+
+    .nota-final {
+      display: block;
+      margin-top: 15px;
+      font-size: 1.1rem;
+      color: #ff007f;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
+    }
+
+    .container-botones {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      transform: translateZ(40px);
+    }
+
+    .btn-cyber {
+      display: inline-block;
+      text-decoration: none;
+      padding: 18px 35px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      border-radius: 16px;
+      text-transform: uppercase;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-regresar {
+      background: #00f2fe;
+      color: #000000;
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
+    }
+
+    .btn-regresar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 45px #00f2fe;
+      background: #ffffff;
+    }
+
+    .btn-ver-mas {
+      background: transparent;
+      color: #ff007f;
+      border: 2px solid #ff007f;
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.2);
+    }
+
+    .btn-ver-mas:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px #ff007f;
+      background: #ff007f;
+      color: #ffffff;
+    }
+
+    @keyframes pulsoNeon {
+      0% { box-shadow: 0 0 10px rgba(255, 0, 127, 0.3); opacity: 0.8; }
+      100% { box-shadow: 0 0 25px rgba(255, 0, 127, 0.6); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="canvas-espacio"></canvas>
+
+  <div class="interface-master">
+    <div id="panel-interactivo" class="glass-panel">
+      <div class="cyber-badge">Cátedra de Desarrollo</div>
+      <h1>Sistemas Web</h1>
+      
+      <p class="mensaje-core">
+        <span class="resaltado-cyber">Juanlu explica de locos las aplicaciones web</span>. Su forma de dar los sistemas y estructurar el código es de nivel máster. ¡Con este despliegue sé al 100% que <span class="resaltado-cyber">me va a aprobar!</span>
+        <span class="nota-final">Proyecto de Rendimiento Premium Garantizado.</span>
+      </p>
+
+      <!-- Contenedor con los dos botones integrados -->
+      <div class="container-botones">
+        <a href="mipagina.html" class="btn-cyber btn-regresar">Volver al inicio</a>
+        <a href="mipagina2.html" class="btn-cyber btn-ver-mas">¿Quieres ver más?</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('canvas-espacio');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let ancho = canvas.width = window.innerWidth;
+      let alto = canvas.height = window.innerHeight;
+      let estrellas = [];
+      let mouseX = 0, mouseY = 0;
+
+      function reajustar() {
+        ancho = canvas.width = window.innerWidth;
+        alto = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', reajustar);
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX - ancho / 2;
+        mouseY = e.clientY - alto / 2;
+      });
+
+      for (let i = 0; i < 200; i++) {
+        estrellas.push({
+          x: (Math.random() - 0.5) * ancho * 2,
+          y: (Math.random() - 0.5) * alto * 2,
+          z: Math.random() * ancho,
+          velocidad: Math.random() * 2 + 1,
+          color: Math.random() > 0.4 ? '#00f2fe' : '#ff007f'
+        });
+      }
+
+      function renderizarEspacio() {
+        ctx.fillStyle = 'rgba(2, 2, 5, 0.15)';
+        ctx.fillRect(0, 0, ancho, alto);
+
+        estrellas.forEach(e => {
+          e.z -= e.velocidad;
+          if (e.z <= 0) e.z = ancho;
+
+          let factor3D = 350 / e.z;
+          let px = e.x * factor3D + ancho / 2 - mouseX * 0.12;
+          let py = e.y * factor3D + alto / 2 - mouseY * 0.12;
+
+          if (px >= 0 && px <= ancho && py >= 0 && py <= alto) {
+            let tamaño = (1 - e.z / ancho) * 4;
+            ctx.beginPath();
+            ctx.fillStyle = e.color;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = e.color;
+            ctx.arc(px, py, tamaño, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+        requestAnimationFrame(renderizarEspacio);
+      }
+      renderizarEspacio();
+    })();
+
+    (function() {
+      const panel = document.getElementById('panel-interactivo');
+      if (!panel) return;
+
+      document.addEventListener('mousemove', (e) => {
+        const mitadX = window.innerWidth / 2;
+        const mitadY = window.innerHeight / 2;
+        const rotacionY = (e.clientX - mitadX) / 25;
+        const rotacionX = (mitadY - e.clientY) / 25;
+        panel.style.transform = `rotateX(${5 + rotacionX}deg) rotateY(${rotacionY}deg)`;
+      });
+
+      document.addEventListener('mouseleave', () => {
+        panel.style.transform = 'rotateX(5deg) rotateY(0deg)';
+      });
+    })();
+  </script>
+
+</body>
+</html>

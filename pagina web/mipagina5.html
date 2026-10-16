@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Preparado...?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #05050a;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Pantalla de Inicio: Cuenta Atrás */
+        #countdown-screen {
+            position: absolute;
+            z-index: 100;
+            background: #05050a;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .countdown-title {
+            font-size: 1.8rem;
+            color: #ffcc00;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        #timer {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #ff0055;
+            text-shadow: 0 0 20px #ff0055, 0 0 40px #ff0000;
+            transition: transform 0.2s ease;
+        }
+
+        .pulse-timer {
+            transform: scale(1.3);
+        }
+
+        /* Pantalla de Fiesta (Oculta al principio) */
+        #party-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Luces estroboscópicas de festival */
+        @keyframes raveLights {
+            0% { background-color: rgba(255, 0, 128, 0.3); }
+            25% { background-color: rgba(0, 255, 255, 0.3); }
+            50% { background-color: rgba(0, 255, 0, 0.3); }
+            75% { background-color: rgba(255, 255, 0, 0.3); }
+            100% { background-color: rgba(255, 0, 128, 0.3); }
+        }
+
+        .rave-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: raveLights 0.3s infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Contenedor del Mensaje de Victoria */
+        .container {
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border: 5px solid #00ffcc;
+            border-radius: 20px;
+            box-shadow: 0 0 40px #00ffcc, inset 0 0 20px #00ffcc;
+            max-width: 90%;
+            width: 650px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #ff007f;
+            text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f;
+            margin-bottom: 20px;
+            animation: pulseText 0.2s infinite alternate;
+        }
+
+        @keyframes pulseText {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.04); text-shadow: 0 0 30px #ff00cc, 0 0 50px #00ffff; }
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #00ffcc;
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px #00ffcc;
+        }
+
+        .suspense {
+            font-size: 1.3rem;
+            color: #ffff00;
+            font-style: italic;
+            margin-top: 20px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Muñecos Bailando */
+        .dancer {
+            position: absolute;
+            font-size: 4.5rem;
+            bottom: 50px;
+            animation: bounce 0.4s infinite alternate ease-in-out;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0) scaleX(1) scaleY(1); }
+            100% { transform: translateY(-150px) rotate(20deg) scaleX(0.9); }
+        }
+
+        /* Aviso para que pinchen la pantalla si el navegador bloquea el arranque */
+        #click-prompt {
+            position: absolute;
+            bottom: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA 1: CUENTA ATRÁS -->
+    <div id="countdown-screen">
+        <p class="countdown-title">Calculando calificaciones finales...</p>
+        <div id="timer">5</div>
+        <p id="click-prompt">Desplázate o haz un click en cualquier lugar para asegurar el audio del sistema 🔊</p>
+    </div>
+
+    <!-- PANTALLA 2: FIESTA TOTAL -->
+    <div id="party-screen">
+        <div class="rave-overlay"></div>
+        <div class="container">
+            <h1>¡VICTORIA ABSOLUTA!</h1>
+            <p class="subtitle">Por fin derrotaste al Gran Jefe final del semestre...</p>
+            <p class="subtitle" style="color: #ffff00; font-size: 2.2rem;">¡¡Y CONSEGUISTE PASAR DE CURSO!! 🎓🎉</p>
+            <p class="suspense">(O bueno... al menos eso es lo que tú te piensas... 😈)</p>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 5;
+        const timerElement = document.getElementById('timer');
+        let audioCtx = null;
+
+        // Inicializar el motor de audio en el primer click/toque de la pantalla (exigencia del navegador)
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        document.body.addEventListener('click', initAudio);
+        document.body.addEventListener('touchstart', initAudio);
+
+        // Generador de sonido artificial: Crea un Redoble de Tambor seguido de un platillazo/explosión synth
+        function reproducirRedobleYExplosion() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const ahora = audioCtx.currentTime;
+
+            // 1. EL REDOBLE: Una secuencia veloz de ruidos amortiguados
+            for (let i = 0; i < 15; i++) {
+                let tiempoGolpe = ahora + (i * 0.08);
+                
+                let bufferSize = audioCtx.sampleRate * 0.05;
+                let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                let data = buffer.getChannelData(0);
+                for (let j = 0; j < bufferSize; j++) {
+                    data[j] = Math.random() * 2 - 1;
+                }
+
+                let noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                let filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(150 + (i * 10), tiempoGolpe); // El tono sube al final
+
+                let gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.3, tiempoGolpe);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, tiempoGolpe + 0.04);
+
+                noise.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                noise.start(tiempoGolpe);
+            }
+
+            // 2. LA EXPLOSIÓN FINAL: Estalla justo cuando acaba el redoble (1.2 segundos después)
+            let tiempoExplosion = ahora + 1.2;
+            let osc = audioCtx.createOscillator();
+            let gainExp = audioCtx.createGain();
+            
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(300, tiempoExplosion);
+            osc.frequency.exponentialRampToValueAtTime(40, tiempoExplosion + 0.8); // Caída de frecuencia pesada
+
+            gainExp.gain.setValueAtTime(0.8, tiempoExplosion);
+            gainExp.gain.exponentialRampToValueAtTime(0.01, tiempoExplosion + 0.8); // Desvanecimiento
+
+            osc.connect(gainExp);
+            gainExp.connect(audioCtx.destination);
+            osc.start(tiempoExplosion);
+            osc.stop(tiempoExplosion + 0.8);
+        }
+
+        // Sistema de la Cuenta Atrás
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            
+            // Animación de pulso en cada número
+            timerElement.classList.add('pulse-timer');
+            setTimeout(() => timerElement.classList.remove('pulse-timer'), 200);
+
+            if (timeLeft > 0) {
+                timerElement.innerText = timeLeft;
+            } else if (timeLeft === 0) {
+                timerElement.innerText = "¡YA!";
+                // Arrancamos los motores de audio del redoble justo un instante antes del estallido visual
+                reproducirRedobleYExplosion();
+            } else {
+                clearInterval(countdownInterval);
+                activarFiesta();
+            }
+        }, 1000);
+
+        // Desbloqueo de la Escena Rave
+        function activarFiesta() {
+            document.getElementById('countdown-screen').style.display = 'none';
+            document.getElementById('party-screen').style.display = 'flex';
+            generarBailarines();
+        }
+
+        // Inyección de muñecos en pantalla
+        const emojis = ['🕺', '💃', '👽', '💀', '🥳', '😎', '🐸', '👾', '👑'];
+        
+        function generarBailarines() {
+            for (let i = 0; i < 22; i++) {
+                let dancer = document.createElement('div');
+                dancer.className = 'dancer';
+                dancer.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                dancer.style.left = Math.random() * 92 + 'vw';
+                
+                // Configuración de saltos caóticos individuales
+                dancer.style.animationDelay = Math.random() * 0.3 + 's';
+                dancer.style.animationDuration = (0.2 + Math.random() * 0.3) + 's';
+                document.body.appendChild(dancer);
+            }
+        }
+    </script>
+</body>
+</html>

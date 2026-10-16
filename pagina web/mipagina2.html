@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intentando Aprobar Aplicaciones Web - El Juego</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: #090a10;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      padding-bottom: 60px;
+      overflow-y: auto;
+    }
+
+    .game-title {
+      color: #00f2fe;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      text-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+      text-align: center;
+    }
+
+    .score-board {
+      color: #fff;
+      font-family: monospace;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 8px 25px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+    }
+
+    #canvas-juego {
+      background: #11131c;
+      border: 4px solid #ff007f;
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255, 0, 127, 0.3);
+      cursor: none;
+      display: block;
+    }
+
+    .instructions {
+      color: #61708f;
+      font-size: 1rem;
+      margin-top: 10px;
+      font-family: monospace;
+      text-align: center;
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    /* --- ENTORNO 3D DE LA BIBLIA ABIERTA --- */
+    .book-container3d {
+      margin: 40px auto;
+      perspective: 1500px;
+      width: 550px;
+      height: 380px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .opened-book {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(25deg) rotateY(0deg);
+      display: flex;
+    }
+
+    .page-3d {
+      width: 50%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 35px 25px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+
+    .left-side {
+      background: linear-gradient(135deg, #420f12 0%, #240507 100%);
+      border: 3px solid #d4af37;
+      border-radius: 12px 4px 4px 12px;
+      transform-origin: right center;
+      transform: rotateY(-30deg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+    }
+
+    .right-side {
+      background: #fcfaf2;
+      border-radius: 4px 12px 12px 4px;
+      transform-origin: left center;
+      transform: rotateY(30deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 10px 0 20px rgba(0,0,0,0.15);
+    }
+
+    .cross-gold {
+      width: 10px;
+      height: 70px;
+      background: #d4af37;
+      position: relative;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    }
+    .cross-gold::after {
+      content: '';
+      width: 44px;
+      height: 10px;
+      background: #d4af37;
+      position: absolute;
+      top: 18px;
+      left: -17px;
+    }
+
+    .title-gold {
+      color: #d4af37;
+      font-family: 'Georgia', serif;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+      letter-spacing: 2px;
+      margin-top: 15px;
+    }
+
+    .versiculo-neon {
+      color: #111;
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      text-align: center;
+      animation: brilloFluorescente 2s infinite alternate;
+    }
+
+    @keyframes brilloFluorescente {
+      0% { text-shadow: 0 0 3px rgba(212, 175, 55, 0.2); color: #222; }
+      100% { text-shadow: 0 0 14px #d4af37, 0 0 22px #ff9900; color: #6e5603; }
+    }
+
+    /* --- SISTEMA DE BOTONES INFERIORES --- */
+    .button-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .btn-action {
+      text-decoration: none;
+      padding: 12px 35px;
+      background: transparent;
+      border: 2px solid #00f2fe;
+      color: #00f2fe;
+      font-weight: bold;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .btn-action:hover {
+      background: #00f2fe;
+      color: #000;
+      box-shadow: 0 0 20px #00f2fe;
+    }
+
+    .btn-next {
+      border-color: #ff007f;
+      color: #ff007f;
+    }
+
+    .btn-next:hover {
+      background: #ff007f;
+      color: #fff;
+      box-shadow: 0 0 20px #ff007f;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-title">Intentando Aprobar Aplicaciones Web</div>
+  <div class="score-board">Aprobados: <span id="puntos">0</span></div>
+
+  <!-- JUEGO DE ESQUIVAR NATIVO -->
+  <canvas id="canvas-juego" width="900" height="550"></canvas>
+  <div class="instructions">Mueve el RATÓN dentro del recuadro para esquivar a Juanlu y recoger los exámenes.</div>
+
+  <!-- LA BIBLIA ABIERTA EN PERSPECTIVA 3D -->
+  <div class="book-container3d">
+    <div class="opened-book">
+      <div class="page-3d left-side">
+        <div class="cross-gold"></div>
+        <div class="title-gold">SAGRADA<br>BIBLIA</div>
+      </div>
+      <div class="page-3d right-side">
+        <div class="versiculo-neon">
+          "Vi además que bajo el sol no es de los ligeros la carrera, ni de los valientes la batalla... sino que a todos les llega su momento y su contratiempo."
+          <br><br>
+          <strong style="font-size: 0.85rem; letter-spacing: 1px; font-style: normal; color: #555;">Eclesiastés 9:11</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grupo de navegación inferior -->
+  <div class="button-group">
+    <button onclick="window.history.back()" class="btn-action">Volver Atrás</button>
+    <a href="mipagina3.html" class="btn-action btn-next">Siguiente Capítulo</a>
+  </div>
+
+  <!-- MOTOR GRÁFICO DEL JUEGO -->
+  <script>
+    (function() {
+      const canvas = document.getElementById('canvas-juego');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const nodoPuntos = document.getElementById('puntos');
+
+      let puntos = 0;
+      let juegoActivo = true;
+      let jugador = { x: 450, y: 400, radio: 12 };
+      let juanlu = { x: 150, y: 150, ancho: 40, alto: 55, velocidad: 1.5 };
+      let examen = { x: 300, y: 250, ancho: 20, alto: 25 };
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (!juegoActivo) return;
+        const rect = canvas.getBoundingClientRect();
+        jugador.x = e.clientX - rect.left;
+        jugador.y = e.clientY - rect.top;
+      });
+
+      canvas.addEventListener('click', () => {
+        if (!juegoActivo) {
+          puntos = 0;
+          nodoPuntos.textContent = puntos;
+          juanlu.x = 100;
+          juanlu.y = 100;
+          juanlu.velocidad = 1.5;
+          examen.x = Math.random() * 600 + 150;
+          examen.y = Math.random() * 250 + 150;
+          juegoActivo = true;
+          loop();
+        }
+      });
+
+      function mesa(y) {
+        ctx.fillStyle = '#301c0e'; ctx.fillRect(100, y, 700, 16);
+        ctx.fillStyle = '#4a5568'; ctx.fillRect(180, y-18, 26, 16); ctx.fillRect(380, y-18, 26, 16); ctx.fillRect(580, y-18, 26, 16);
+        ctx.fillStyle = '#00f2fe'; ctx.fillRect(182, y-16, 22, 12); ctx.fillRect(384, y-16, 22, 12); ctx.fillRect(582, y-16, 22, 12);
+      }
+
+      function loop() {
+        if (!juegoActivo) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#0b2e25'; ctx.fillRect(200, 20, 500, 50);
+        ctx.strokeStyle = '#4e321c'; ctx.lineWidth = 5; ctx.strokeRect(200, 20, 500, 50);
+        ctx.fillStyle = '#ffffff'; ctx.font = 'bold 12px monospace'; ctx.fillText('ENTREGA FINAL: PROYECTO APLICACIONES WEB', 310, 48);
+
+        mesa(160); mesa(280); mesa(400);
+
+        let dx = jugador.x - (juanlu.x + 20);
+        let dy = jugador.y - (juanlu.y + 27);
+        let dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > 0) { juanlu.x += (dx/dist)*juanlu.velocidad; juanlu.y += (dy/dist)*juanlu.velocidad; }
+
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(juanlu.x + 6, juanlu.y, 28, 12);
+        ctx.fillStyle = '#ebd1be'; ctx.fillRect(juanlu.x + 8, juanlu.y + 12, 24, 14);
+        ctx.fillStyle = '#0055ff'; ctx.fillRect(juanlu.x, juanlu.y + 26, 40, 29);
+
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(examen.x, examen.y, examen.ancho, examen.alto);
+        ctx.fillStyle = '#00ff66'; ctx.font = 'bold 9px sans-serif'; ctx.fillText('10', examen.x + 5, examen.y + 18);
+
+        ctx.fillStyle = '#ff007f'; ctx.beginPath(); ctx.arc(jugador.x, jugador.y, jugador.radio, 0, Math.PI*2); ctx.fill();
+
+        if (jugador.x + jugador.radio > examen.x && jugador.x - jugador.radio < examen.x + examen.ancho &&
+            jugador.y + jugador.radio > examen.y && jugador.y - jugador.radio < examen.y + examen.alto) {
+          puntos++; nodoPuntos.textContent = puntos;
+          examen.x = Math.random() * 600 + 150; examen.y = Math.random() * 250 + 150;
+          juanlu.velocidad += 0.12;
+        }
+
+        if (jugador.x + jugador.radio > juanlu.x && jugador.x - jugador.radio < juanlu.x + 40 &&
+            jugador.y + jugador.radio > juanlu.y && jugador.y - jugador.radio < juanlu.y + 55) {
+          juegoActivo = false;
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.9)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#ff0055'; ctx.font = 'bold 3rem sans-serif'; ctx.textAlign = 'center'; ctx.fillText('SUSPENDIDO', canvas.width/2, canvas.height/2 - 20);
+          ctx.fillStyle = '#ffffff'; ctx.font = '1.2rem monospace'; ctx.fillText('Clic en la pantalla para reintentar.', canvas.width/2, canvas.height/2 + 30);
+          ctx.textAlign = 'left';
+          return;
+        }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+  </script>
+
+</body>
+</html>
+

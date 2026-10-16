@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Examen salvaje! — Batalla RPG</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+  :root{--ink:#17233e;--cream:#fff7d6;--blue:#77d7ff;--red:#ff5d73;--green:#70e69a;--gold:#ffda6b}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:#111b37;color:var(--ink);font-family:'VT323',monospace;display:grid;place-items:center;padding:18px;overflow-x:hidden}
+  body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:radial-gradient(circle at 20% 20%,#6355b8 0 2px,transparent 3px),radial-gradient(circle at 80% 70%,#77d7ff 0 2px,transparent 3px);background-size:62px 62px,91px 91px;animation:stars 18s linear infinite}
+  @keyframes stars{to{background-position:124px 124px,-182px 182px}}
+  .game{width:min(920px,100%);border:5px solid #f8edbf;box-shadow:0 0 0 5px #3a4d78,0 20px 70px #0008;background:var(--cream);position:relative}
+  .topbar{background:#25345c;color:#fff7d6;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 16px;font-size:24px;border-bottom:4px solid #17233e}
+  .pixel{font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.7}
+  button{font-family:'Press Start 2P',monospace;font-size:10px;line-height:1.6;border:3px solid #17233e;background:#fffdf1;color:#17233e;padding:12px;box-shadow:4px 4px 0 #17233e;cursor:pointer;transition:transform .12s,box-shadow .12s}
+  button:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 #17233e;background:#fff0a8}
+  button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #17233e}
+  button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  .sound{font-size:9px;padding:8px 10px;background:#384d7c;color:white;border-color:#fff7d6;box-shadow:3px 3px 0 #10172c}
+  .scene{height:340px;position:relative;overflow:hidden;background:linear-gradient(#91dcf7 0%,#d8f7ec 64%,#82cb78 64%,#58a85e 100%);border-bottom:4px solid #17233e}
+  .sun{position:absolute;width:58px;height:58px;border-radius:50%;background:#fff2a1;right:11%;top:12%;box-shadow:0 0 0 10px #fff2a133,0 0 35px #fff2a1}
+  .cloud{position:absolute;width:100px;height:24px;border-radius:30px;background:#ffffffa8;top:19%;left:13%;animation:cloud 15s linear infinite alternate}
+  .cloud:before,.cloud:after{content:"";position:absolute;background:inherit;border-radius:50%;width:34px;height:34px;top:-15px;left:18px}.cloud:after{width:45px;height:45px;left:43px;top:-22px}
+  @keyframes cloud{to{transform:translateX(90px)}}
+  .hills{position:absolute;bottom:0;left:-5%;width:110%;height:42%;background:#4da96b;clip-path:polygon(0 48%,14% 0,29% 53%,44% 15%,58% 59%,74% 4%,90% 49%,100% 18%,100% 100%,0 100%);opacity:.8}
+  .platform{position:absolute;width:290px;height:90px;border-radius:50%;background:#7cc86f;border:5px solid #387a58;box-shadow:inset 0 -12px #54a95f;transform:skewX(-13deg)}
+  .platform.enemy{right:4%;top:45%;width:340px;height:98px}
+  .platform.player{left:4%;bottom:3%;width:300px;height:85px}
+  .enemy{position:absolute;right:15%;top:18%;width:180px;height:180px;display:grid;place-items:center;filter:drop-shadow(0 8px 0 #315d50);animation:float 2s ease-in-out infinite}
+  .enemy svg{width:100%;height:100%;overflow:visible}
+  @keyframes float{50%{transform:translateY(-9px)}}
+  .student{position:absolute;left:10%;bottom:12%;width:132px;height:155px;filter:drop-shadow(0 7px 0 #315d50);animation:idle 2.4s ease-in-out infinite}
+  @keyframes idle{50%{transform:translateY(-4px)}}
+  .status{position:absolute;z-index:3;background:#fff9e5;border:4px solid #17233e;padding:10px 12px;width:min(300px,43%);box-shadow:4px 4px 0 #17233e}
+  .status.enemybox{left:4%;top:6%}.status.playerbox{right:4%;bottom:5%}
+  .name{font-family:'Press Start 2P',monospace;font-size:11px;margin-bottom:9px}
+  .level{float:right;font-size:18px}
+  .hp-row{display:flex;align-items:center;gap:7px;font-family:'Press Start 2P',monospace;font-size:8px}
+  .hpbar{height:10px;flex:1;background:#d3c9a5;border:2px solid #17233e;padding:1px}
+  .hpfill{height:100%;width:100%;background:var(--green);transition:width .35s}
+  .hpfill.enemyhp{background:var(--red)}
+  .hpnum{text-align:right;font-size:16px;margin-top:4px}
+  .battlelog{background:#fffdf1;border-bottom:4px solid #17233e;padding:14px 18px;min-height:78px;display:flex;align-items:center;gap:12px;font-size:26px;line-height:1.1}
+  .cursor{width:12px;height:12px;flex-shrink:0;background:#25345c;transform:rotate(45deg);animation:blink .8s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .battlearea{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px}
+  .moves{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .moves button{min-height:76px;text-align:left;position:relative;padding:12px 10px 10px 14px}
+  .moves button:before{content:"▶";font-size:9px;display:inline-block;margin-right:7px;color:#e45b64}
+  .move-sub{display:block;font-family:'VT323',monospace;font-size:20px;margin:4px 0 0 20px;color:#5b6380}
+  .panel{border:3px solid #25345c;background:#e7edff;padding:12px}
+  .panel h2{font-family:'Press Start 2P',monospace;font-size:10px;margin:0 0 12px}
+  .bag{display:flex;gap:8px;flex-wrap:wrap}
+  .bag button{font-size:8px;padding:9px;box-shadow:3px 3px 0 #17233e}
+  .footer{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:0 16px 16px;color:#5b6380;font-size:19px}
+  .overlay{position:absolute;inset:0;background:#10172ce8;z-index:10;display:grid;place-items:center;padding:22px;text-align:center;color:#fff7d6}
+  .modal{max-width:600px}
+  .modal h1{font-family:'Press Start 2P',monospace;font-size:clamp(18px,4vw,30px);line-height:1.6;color:var(--gold);text-shadow:4px 4px #a23e61;margin:0 0 14px}
+  .modal p{font-size:28px;line-height:1.1;margin:12px 0 22px}
+  .modal button{margin:6px}
+  .hidden{display:none!important}
+  .shake{animation:shake .35s linear}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+  .flash{animation:flash .28s steps(2)}
+  @keyframes flash{50%{filter:brightness(2) saturate(0)}}
+  .damage{position:absolute;z-index:5;right:24%;top:25%;font-family:'Press Start 2P',monospace;font-size:25px;color:#fff; text-shadow:3px 3px #b52c4c;animation:damage .8s forwards;pointer-events:none}
+  @keyframes damage{to{transform:translateY(-55px) scale(1.4);opacity:0}}
+  @media(max-width:650px){body{padding:8px}.topbar{font-size:18px;padding:10px}.scene{height:300px}.status{width:48%;padding:7px}.name{font-size:8px}.pixel{font-size:8px}.enemy{width:135px;height:135px;right:8%;top:27%}.student{width:98px;height:120px;left:7%;bottom:13%}.platform.enemy{width:65%;height:80px}.platform.player{width:58%;height:65px}.battlearea{grid-template-columns:1fr;padding:10px}.moves button{font-size:8px;min-height:65px}.battlelog{font-size:22px;min-height:85px}.footer{font-size:16px;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<main class="game" id="game">
+  <div class="topbar"><span class="pixel">ACADEMIA RPG</span><span>⚔ EXAMEN SALVAJE</span><button class="sound" id="soundBtn" type="button">♫ ACTIVAR MÚSICA</button></div>
+  <section class="scene" id="scene" aria-label="Escenario de batalla">
+    <div class="sun"></div><div class="cloud"></div><div class="hills"></div>
+    <div class="platform enemy"></div><div class="platform player"></div>
+    <div class="status enemybox"><div class="name">EXAMEN FINAL <span class="level">Nv. 99</span></div><div class="hp-row">DIFICULTAD <div class="hpbar"><div class="hpfill enemyhp" id="enemyFill"></div></div></div><div class="hpnum" id="enemyNum">100 / 100</div></div>
+    <div class="enemy" id="enemySprite">
+      <svg viewBox="0 0 180 180" aria-label="Examen monstruoso">
+        <defs><linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffce9"/><stop offset="1" stop-color="#e6d9b5"/></linearGradient></defs>
+        <path d="M40 21 L124 21 L148 46 L148 145 Q148 156 137 156 L42 156 Q31 156 31 145 L31 32 Q31 21 40 21Z" fill="url(#paper)" stroke="#24324e" stroke-width="5"/>
+        <path d="M124 21 L124 44 L148 44" fill="#c9bd9c" stroke="#24324e" stroke-width="4"/>
+        <path d="M47 57 H127 M47 73 H114 M47 88 H126" stroke="#d2a9a4" stroke-width="3"/>
+        <path d="M48 106 L57 115 L72 98 M84 106 H125 M48 129 H72 M84 129 H126" fill="none" stroke="#5d75a3" stroke-width="4"/>
+        <path d="M52 91 Q64 77 76 91" fill="none" stroke="#c9475c" stroke-width="5"/>
+        <ellipse cx="70" cy="48" rx="8" ry="12" fill="#25345c"/><ellipse cx="111" cy="48" rx="8" ry="12" fill="#25345c"/>
+        <circle cx="72" cy="45" r="2.5" fill="#fff"/><circle cx="113" cy="45" r="2.5" fill="#fff"/>
+        <path d="M81 64 L99 64" stroke="#c9475c" stroke-width="5"/>
+        <path d="M21 66 L8 55 M157 70 L172 56 M24 122 L8 130 M158 121 L174 132" stroke="#e75b70" stroke-width="5" stroke-linecap="round"/>
+        <text x="90" y="15" font-size="12" text-anchor="middle" font-family="monospace" fill="#b52c4c" font-weight="bold">F-</text>
+      </svg>
+    </div>
+    <svg class="student" viewBox="0 0 132 155" aria-label="Alumno protagonista">
+      <path d="M35 64 Q14 77 24 111 L34 123 L44 91" fill="#f1bd8e" stroke="#263454" stroke-width="4"/>
+      <path d="M91 64 Q115 77 108 107 L98 119 L87 91" fill="#f1bd8e" stroke="#263454" stroke-width="4"/>
+      <path d="M40 90 L35 132 L50 145 L82 145 L96 132 L91 90Z" fill="#4777d4" stroke="#263454" stroke-width="5"/>
+      <path d="M54 91 L66 108 L78 91 L73 129 L60 129Z" fill="#fff5d5"/>
+      <path d="M41 131 L36 148 L60 148 L64 138 M83 131 L89 148 L112 148 L96 131" fill="#39496e" stroke="#263454" stroke-width="4"/>
+      <path d="M43 32 Q39 9 66 9 Q96 9 91 36 L87 64 Q82 81 66 81 Q49 79 44 62Z" fill="#f1bd8e" stroke="#263454" stroke-width="4"/>
+      <path d="M40 38 Q29 8 60 5 Q88 -1 98 22 L88 30 L74 20 L58 31 L45 28Z" fill="#513d3a" stroke="#263454" stroke-width="4"/>
+      <path d="M49 46 L60 46 M73 46 L84 46" stroke="#263454" stroke-width="4" stroke-linecap="round"/>
+      <path d="M58 63 Q66 69 75 62" fill="none" stroke="#a74d51" stroke-width="3"/>
+      <path d="M25 77 L10 96 L25 103 M106 77 L121 95 L107 104" fill="#f1bd8e" stroke="#263454" stroke-width="4"/>
+      <path d="M12 94 L3 89 M119 94 L128 88" stroke="#263454" stroke-width="4"/>
+    </svg>
+  </section>
+  <div class="battlelog" aria-live="polite"><span class="cursor"></span><span id="log">¡Un EXAMEN FINAL salvaje ha aparecido! ¿Qué hará el alumno?</span></div>
+  <section class="battlearea">
+    <div class="panel"><h2>¿QUÉ HARÁ EL ALUMNO?</h2>
+      <div class="moves">
+        <button data-move="copy">Copiar al compañero <span class="move-sub">Daño: 18–28</span></button>
+        <button data-move="chuleta">Chuletazo <span class="move-sub">Daño: 12–36</span></button>
+        <button data-move="memory">Memoria de última hora <span class="move-sub">Daño: 20–30</span></button>
+        <button data-move="ceiling">Mirar al techo <span class="move-sub">Daño: 5–45</span></button>
+      </div>
+    </div>
+    <div class="panel"><h2>MOCHILA DEL ALUMNO</h2><p style="font-size:22px;margin:0 0 10px">Un pequeño empujón antes de que se acabe el tiempo.</p>
+      <div class="bag"><button id="coffee">☕ Café energético (+15 vida)</button><button id="hint">💡 Pista del profe (debilita)</button></div>
+      <p style="font-size:18px;color:#596582;margin:12px 0 0">Objetos: <span id="items">1 café · 1 pista</span></p>
+    </div>
+  </section>
+  <div class="footer"><span>★ OBJETIVO: ¡SOBREVIVE AL EXAMEN!</span><span id="turn">TURNO 1</span></div>
+  <div class="overlay" id="intro">
+    <div class="modal"><h1>¡EXAMEN SALVAJE!</h1><p>Vas tranquilamente por el pasillo… ¡pero aparece el EXAMEN FINAL! No te sabes ni la primera pregunta.</p><p class="pixel">Prepárate para luchar por el aprobado.</p><button id="start">¡EMPEZAR BATALLA!</button><br><span style="font-size:18px">Consejo: usa los ataques y los objetos con cabeza.</span></div>
+  </div>
+  <div class="overlay hidden" id="end">
+    <div class="modal"><h1 id="endTitle">¡DERROTA!</h1><p id="endText">El examen ha sido demasiado difícil…</p><button id="retry">↻ VOLVER A INTENTAR</button><button id="continue" class="hidden">CONTINUAR A LA SIGUIENTE PÁGINA →</button></div>
+  </div>
+</main>
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const maxHP = 100, maxPlayer = 100;
+  let enemyHP=100, playerHP=100, turn=1, busy=false, ended=false, coffeeUsed=false, hintUsed=false;
+  let audioCtx=null, master=null, musicTimer=null, musicOn=false, noteStep=0;
+  const logEl=$('#log'), scene=$('#scene');
+  const moves=[...document.querySelectorAll('[data-move]')];
+  function log(t){logEl.textContent=t}
+  function update(){
+    $('#enemyFill').style.width=Math.max(0,enemyHP)+'%';
+    $('#enemyNum').textContent=Math.max(0,enemyHP)+' / 100';
+    $('#playerFill')?.style.setProperty('width',Math.max(0,playerHP)+'%');
+    $('#turn').textContent='TURNO '+turn;
+    $('#items').textContent=(coffeeUsed?'0 cafés':'1 café')+' · '+(hintUsed?'0 pistas':'1 pista');
+    moves.forEach(b=>b.disabled=busy||ended);
+    $('#coffee').disabled=busy||ended||coffeeUsed||playerHP>=100;
+    $('#hint').disabled=busy||ended||hintUsed;
+  }
+  // Add the player's status panel dynamically so all battle stats are updated in one place.
+  const playerBox=document.createElement('div');
+  playerBox.className='status playerbox';
+  playerBox.innerHTML='<div class="name">ALUMNO <span class="level">Nv. 17</span></div><div class="hp-row">ÁNIMO <div class="hpbar"><div class="hpfill" id="playerFill"></div></div></div><div class="hpnum" id="playerNum">100 / 100</div>';
+  scene.appendChild(playerBox);
+  const oldUpdate=update;
+  update=function(){
+    $('#enemyFill').style.width=Math.max(0,enemyHP)+'%';
+    $('#enemyNum').textContent=Math.max(0,enemyHP)+' / 100';
+    $('#playerFill').style.width=Math.max(0,playerHP)+'%';
+    $('#playerNum').textContent=Math.max(0,playerHP)+' / 100';
+    $('#turn').textContent='TURNO '+turn;
+    $('#items').textContent=(coffeeUsed?'0 cafés':'1 café')+' · '+(hintUsed?'0 pistas':'1 pista');
+    moves.forEach(b=>b.disabled=busy||ended);
+    $('#coffee').disabled=busy||ended||coffeeUsed||playerHP>=100;
+    $('#hint').disabled=busy||ended||hintUsed;
+  };
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  function popDamage(text,enemy=true){
+    const el=document.createElement('div');el.className='damage';el.textContent=text;
+    el.style.right=enemy?'18%':'auto';el.style.left=enemy?'auto':'18%';el.style.top=enemy?'23%':'60%';
+    scene.appendChild(el);setTimeout(()=>el.remove(),850);
+  }
+  function hitEnemy(dmg){
+    enemyHP=Math.max(0,enemyHP-dmg);update();$('#enemySprite').classList.remove('flash');void $('#enemySprite').offsetWidth;$('#enemySprite').classList.add('flash');popDamage('-'+dmg);
+  }
+  function hitPlayer(dmg){
+    playerHP=Math.max(0,playerHP-dmg);update();scene.classList.remove('shake');void scene.offsetWidth;scene.classList.add('shake');popDamage('-'+dmg,false);
+  }
+  function finish(win){
+    if(ended) return;
+    // The result is determined only by the enemy's HP, never by the player's HP.
+    win = Boolean(win && enemyHP <= 0);
+    if(!win && playerHP > 0) return;
+    ended=true;busy=false;
+    $('#endTitle').textContent=win?'¡APROBADO!':'¡SUSPENSO…';
+    $('#endText').textContent=win
+      ?'¡Has derrotado al Examen Final! Por fin puedes salir del aula con la cabeza bien alta.'
+      :'El examen te ha dejado sin ánimo. Esta vez no ha salido bien, pero puedes intentarlo otra vez.';
+    $('#retry').classList.toggle('hidden',win);
+    $('#continue').classList.toggle('hidden',!win);
+    $('#end').classList.remove('hidden');
+    if(win){log('¡El Examen Final ha sido derrotado! ¡Has aprobado!');playJingle(true)}
+    else {log('¡Te has quedado sin ánimo! Has perdido el combate.');playJingle(false)}
+    update();
+  }
+  async function enemyTurn(){
+    if(ended)return;
+    busy=true;update();await sleep(650);
+    if(enemyHP<=0){finish(true);return}
+    const attacks=[
+      ['Pregunta trampa',7,12,'¡El examen lanza una pregunta trampa!'],
+      ['Enunciado infinito',6,11,'¡El examen te lanza un enunciado de tres páginas!'],
+      ['Fórmula olvidada',8,13,'¡El examen usa Fórmula Olvidada!']
+    ];
+    const a=attacks[Math.floor(Math.random()*attacks.length)];
+    log(a[3]);await sleep(500);
+    hitPlayer(a[1]+Math.floor(Math.random()*(a[2]-a[1]+1)));await sleep(350);
+    if(playerHP<=0){finish(false);return}
+    turn++;busy=false;update();log('El examen te mira con cara de pocos amigos. ¿Cuál será tu siguiente movimiento?');
+  }
+  async function doMove(type){
+    if(busy||ended)return;
+    busy=true;update();
+    const attacks={
+      copy:{name:'¡Copiar al compañero!',min:24,max:32,lines:['¡El compañero escribe rapidísimo!','Has conseguido copiar una respuesta medio legible.']},
+      chuleta:{name:'¡CHULETAZO!',min:18,max:40,lines:['¡La chuleta secreta entra en acción!','Una fórmula aparece justo cuando la necesitas.']},
+      memory:{name:'¡Memoria de última hora!',min:26,max:35,lines:['¡Recuerdas algo de la clase de ayer!','Las neuronas hacen un combo inesperado.']},
+      ceiling:{name:'¡Mirar al techo!',min:10,max:48,lines:['Buscas inspiración en el techo…','¡Una idea cae del cielo! O quizá no.']}
+    };
+    const a=attacks[type];log(a.lines[Math.floor(Math.random()*a.lines.length)]);await sleep(450);
+    const dmg=a.min+Math.floor(Math.random()*(a.max-a.min+1));hitEnemy(dmg);await sleep(550);
+    if(enemyHP<=0){finish(true);return}
+    if(playerHP<=0){finish(false);return}
+    busy=false;await enemyTurn();
+  }
+  moves.forEach(b=>b.addEventListener('click',()=>doMove(b.dataset.move)));
+  $('#coffee').addEventListener('click',async()=>{
+    if(busy||ended||coffeeUsed||playerHP>=100)return;
+    busy=true;coffeeUsed=true;playerHP=Math.min(100,playerHP+15);update();log('¡Te tomas un café energético! Recuperas 15 puntos de ánimo.');playBlip(660,.12);await sleep(650);await enemyTurn();
+  });
+  $('#hint').addEventListener('click',async()=>{
+    if(busy||ended||hintUsed)return;
+    busy=true;hintUsed=true;const dmg=18;hitEnemy(dmg);update();log('¡El profesor te da una pista sin querer! El examen pierde 18 puntos de dificultad.');playBlip(880,.15);await sleep(650);if(enemyHP<=0){finish(true);return}await enemyTurn();
+  });
+  $('#start').addEventListener('click',()=>{$('#intro').classList.add('hidden');log('¡Un EXAMEN FINAL salvaje ha aparecido! ¡Elige tu primer ataque!');startMusic();});
+  $('#retry').addEventListener('click',()=>{
+    enemyHP=100;playerHP=100;turn=1;busy=false;ended=false;coffeeUsed=false;hintUsed=false;
+    $('#end').classList.add('hidden');$('#enemySprite').classList.remove('flash');scene.classList.remove('shake');
+    $('#retry').classList.remove('hidden');$('#continue').classList.add('hidden');
+    update();log('¡Un nuevo Examen Final salvaje ha aparecido! Esta vez puedes con él.');startMusic();
+  });
+  $('#continue').addEventListener('click',()=>{window.location.href='mipagina5.html'});
+  $('#soundBtn').addEventListener('click',()=>{if(musicOn)stopMusic();else startMusic()});
+  function ensureAudio(){
+    if(!audioCtx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;audioCtx=new AC();master=audioCtx.createGain();master.gain.value=.14;master.connect(audioCtx.destination)}
+    if(audioCtx.state==='suspended')audioCtx.resume();return true;
+  }
+  function tone(freq,duration,type='square',vol=.24,when=0){
+    if(!ensureAudio())return;
+    const t=audioCtx.currentTime+when,osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+    osc.type=type;osc.frequency.setValueAtTime(freq,t);gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(vol,t+.012);gain.gain.exponentialRampToValueAtTime(.0001,t+duration);
+    osc.connect(gain);gain.connect(master);osc.start(t);osc.stop(t+duration+.03);
+  }
+  const melody=[659,0,659,0,659,0,523,659,784,0,392,0,523,392,330,440,494,466,440,392,659,784,880,784,659,523,587,494];
+  function musicLoop(){
+    if(!musicOn)return;
+    const n=melody[noteStep%melody.length];
+    if(n)tone(n,.14,'square',.12);
+    if(noteStep%4===0)tone(noteStep%8===0?110:146,.11,'triangle',.18);
+    noteStep++;musicTimer=setTimeout(musicLoop,noteStep%8===0?240:155);
+  }
+  function startMusic(){if(musicOn)return;musicOn=true;$('#soundBtn').textContent='♫ SILENCIAR';ensureAudio();musicLoop()}
+  function stopMusic(){musicOn=false;clearTimeout(musicTimer);$('#soundBtn').textContent='♫ ACTIVAR MÚSICA'}
+  function playBlip(f,d){tone(f,d,'square',.2)}
+  function playJingle(win){stopMusic();const seq=win?[784,988,1175,1568]:[392,370,330,262];seq.forEach((n,i)=>tone(n,.22,'square',.2,i*.18));}
+  update();
+})();
+</script>
+</body>
+</html>
